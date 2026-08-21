@@ -7,7 +7,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -23,13 +23,14 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --border-highlight: rgba(0, 242, 254, 0.3);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --global-font: 'Plus Jakarta Sans', sans-serif;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: var(--global-font), -apple-system, BlinkMacSystemFont, sans-serif;
             scroll-behavior: smooth;
         }
 
@@ -108,7 +109,8 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(11, 19, 41, 0.85);
+            background: var(--bg-primary);
+            opacity: 0.92;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: flex;
@@ -151,7 +153,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Menu Titik Tiga (Dropdown Nav) */
         .nav-wrapper {
             position: relative;
         }
@@ -235,7 +236,7 @@
             border: 1px solid var(--border-highlight);
             border-radius: 20px;
             width: 100%;
-            max-width: 550px;
+            max-width: 580px;
             padding: 30px;
             max-height: 90vh;
             overflow-y: auto;
@@ -285,6 +286,12 @@
             transition: border-color 0.3s;
         }
 
+        .admin-group input[type="color"] {
+            height: 40px;
+            padding: 4px;
+            cursor: pointer;
+        }
+
         .admin-group input:focus, .admin-group select:focus, .admin-group textarea:focus {
             border-color: var(--accent-cyan);
         }
@@ -292,6 +299,32 @@
         .admin-group textarea {
             height: 80px;
             resize: none;
+        }
+
+        /* Preset Tema Tombol Grid */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-preset {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .btn-preset:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.1);
         }
 
         .btn-action {
@@ -379,8 +412,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.12) 0%, rgba(11, 19, 41, 0) 70%),
-                        linear-gradient(180deg, #0b1329 0%, #0d1733 100%);
+            background: radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.12) 0%, transparent 70%),
+                        var(--bg-primary);
             padding-top: 120px;
             position: relative;
         }
@@ -421,7 +454,7 @@
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -1px;
-            background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan));
+            background: linear-gradient(135deg, var(--text-main) 30%, var(--accent-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
@@ -534,7 +567,7 @@
 
         .badge-walikelas {
             background: rgba(255, 42, 116, 0.15);
-            color: #ff2a74;
+            color: var(--accent-pink);
             border: 1px solid rgba(255, 42, 116, 0.3);
         }
 
@@ -614,7 +647,7 @@
             height: 120px;
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
-            color: white;
+            color: var(--text-main);
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
@@ -762,9 +795,9 @@
             line-height: 1.8;
         }
 
-        /* CSS FOOTER & TOMBOL ADMIN RESPONSIF */
+        /* FOOTER */
         footer {
-            background: #070c1b;
+            background: var(--bg-secondary);
             text-align: center;
             padding: 30px 20px;
             font-size: 0.85rem;
@@ -781,8 +814,6 @@
             cursor: pointer !important;
             font-size: 0.85rem;
             transition: color 0.3s ease;
-            
-            /* Diperbarui agar mudah diklik di HP & PC */
             display: inline-block;
             padding: 8px 12px;
             margin: -8px -12px;
@@ -826,7 +857,7 @@
     <!-- Navigation Bar Sticky dengan Auto-Hide & Titik Tiga -->
     <header id="mainHeader">
         <a href="#home" class="logo-container">
-            <img src="https://via.placeholder.com/150" alt="Logo" class="nav-logo-img" id="navLogoImg">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=85&w=400" alt="Logo" class="nav-logo-img" id="navLogoImg">
             <span class="logo-text" id="siteLogoText">Cyber Mimpi</span>
         </a>
         <div class="nav-wrapper">
@@ -846,6 +877,60 @@
     <div id="adminModal" class="modal-overlay">
         <div class="modal-content">
             <h3>Panel Pengaturan Admin</h3>
+
+            <!-- Pengaturan Tema Preset & Font Keseluruhan Web -->
+            <div class="admin-group" style="border-color: var(--accent-pink);">
+                <h4>🎨 Pengaturan Tema & Font Website</h4>
+                
+                <label>Pilih Tema Preset Instan:</label>
+                <div class="preset-grid">
+                    <button class="btn-preset" onclick="terapkanPresetTema('cyberpunk')">⚡ Cyberpunk Neon</button>
+                    <button class="btn-preset" onclick="terapkanPresetTema('emerald')">🌿 Emerald Dark</button>
+                    <button class="btn-preset" onclick="terapkanPresetTema('sunset')">🌅 Sunset Orange</button>
+                    <button class="btn-preset" onclick="terapkanPresetTema('midnight')">🌌 Midnight Blue</button>
+                </div>
+
+                <label>Atau Pilih Jenis Font Utama Website:</label>
+                <select id="inputGlobalFont">
+                    <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Default Modern)</option>
+                    <option value="'Poppins', sans-serif">Poppins (Clean & Populer)</option>
+                    <option value="'Inter', sans-serif">Inter (Minimalis Clean)</option>
+                    <option value="'Orbitron', sans-serif">Orbitron (Tema Futuristik / Cyber)</option>
+                    <option value="'JetBrains Mono', monospace">JetBrains Mono (Gaya Coding/Terminal)</option>
+                </select>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top:10px;">
+                    <div>
+                        <label>Warna Background Utama:</label>
+                        <input type="color" id="inputBgPrimary" value="#0b1329">
+                    </div>
+                    <div>
+                        <label>Warna Background Kartu:</label>
+                        <input type="color" id="inputBgCard" value="#172547">
+                    </div>
+                    <div>
+                        <label>Warna Aksen Utama (Cyan):</label>
+                        <input type="color" id="inputAccentCyan" value="#00f2fe">
+                    </div>
+                    <div>
+                        <label>Warna Aksen Kedua (Pink/Red):</label>
+                        <input type="color" id="inputAccentPink" value="#ff2a74">
+                    </div>
+                    <div>
+                        <label>Warna Teks Utama (Putih/Terang):</label>
+                        <input type="color" id="inputTextMain" value="#f1f5f9">
+                    </div>
+                    <div>
+                        <label>Warna Teks Sekunder (Muted):</label>
+                        <input type="color" id="inputTextMuted" value="#94a3b8">
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top: 15px;">
+                    <button class="btn-action" style="background: linear-gradient(135deg, #ff2a74, #ff6b00); color:white;" onclick="terapkanTemaCustom()">Terapkan Tema Manual</button>
+                    <button class="btn-action btn-close" style="margin:0; background:rgba(255,255,255,0.1); color:white;" onclick="resetTemaDefault()">Reset Default</button>
+                </div>
+            </div>
 
             <!-- Pengaturan Logo & Identitas Utama -->
             <div class="admin-group" style="border-color: var(--accent-cyan);">
@@ -889,7 +974,7 @@
 
                 <input type="text" id="inputPeranAnggota" placeholder="Detail Jabatan (misal: Wali Kelas, Ketua Kelas, Siswa)">
                 <textarea id="inputBioAnggota" placeholder="Deskripsi Singkat / Bio..."></textarea>
-                <input type="text" id="inputFotoAnggota" placeholder="URL Foto Profil (https...)">
+                <input type="text" id="inputFotoAnggota" placeholder="URL Foto Profil HD (https...)">
                 <div style="display:flex; gap:10px;">
                     <button class="btn-action" onclick="simpanAnggota()">Simpan Anggota</button>
                     <button class="btn-action btn-close" style="margin:0;" onclick="resetFormAnggota()">Batal Edit</button>
@@ -923,7 +1008,7 @@
                 <input type="text" id="inputJudulFoto" placeholder="Judul Foto">
                 <textarea id="inputDeskripsiFoto" placeholder="Deskripsi Singkat Foto..."></textarea>
                 <input type="text" id="inputTanggalFoto" placeholder="Tanggal (Contoh: 12 Agustus 2026)">
-                <input type="text" id="inputUrlFoto" placeholder="URL Gambar (https...)">
+                <input type="text" id="inputUrlFoto" placeholder="URL Gambar HD (https...)">
                 <div style="display:flex; gap:10px;">
                     <button class="btn-action" onclick="simpanFotoGaleri()">Simpan Foto</button>
                     <button class="btn-action btn-close" style="margin:0;" onclick="resetFormFoto()">Batal Edit</button>
@@ -941,7 +1026,7 @@
     <div id="changeImageModal" class="modal-overlay">
         <div class="modal-content" style="max-width: 450px;">
             <h3>🖼️ Ganti Foto Langsung</h3>
-            <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:15px; text-align:center;">Masukkan URL/Link gambar baru di bawah ini:</p>
+            <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:15px; text-align:center;">Masukkan URL/Link gambar HD baru di bawah ini:</p>
             <input type="text" id="inputDirectImageUrl" placeholder="https://domain.com/foto.jpg">
             <div style="display:flex; gap:10px;">
                 <button class="btn-action" onclick="terapkanGantiFoto()">Ganti Foto</button>
@@ -975,7 +1060,7 @@
     <!-- Hero Section -->
     <section id="home">
         <div class="hero-logo-wrapper">
-            <img src="https://via.placeholder.com/150" alt="Logo Kelas" class="hero-logo" id="heroLogoImg" onclick="handleImgClick(event, 'hero')">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=85&w=600" alt="Logo Kelas" class="hero-logo" id="heroLogoImg" onclick="handleImgClick(event, 'hero')">
         </div>
         <h1 class="hero-title" id="textHeroTitle">Cyber Mimpi XI TKJ 2</h1>
         <p class="hero-subtitle" id="textHeroSubtitle">Selamat datang di website resmi kelas kami. Wadah kreativitas, memori kebersamaan, dan informasi seputar kelas XI TKJ 2.</p>
@@ -1055,35 +1140,42 @@
                 kategori: 'WALI KELAS',
                 peran: 'Wali Kelas XI TKJ 2',
                 bio: 'Wali kelas XI TKJ 2 yang senantiasa membimbing siswa-siswi menjadi berprestasi.',
-                foto: 'https://via.placeholder.com/150'
+                foto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=85&w=800'
             },
             {
                 nama: 'Denis Alfarisi',
                 kategori: 'PENGURUS KELAS',
                 peran: 'Ketua Kelas',
                 bio: 'Bertanggung jawab memimpin kelas dan menjadi jembatan antara siswa dengan guru.',
-                foto: 'https://via.placeholder.com/150'
+                foto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=85&w=800'
             },
             {
                 nama: 'Asih Puspita Dewi',
                 kategori: 'PENGURUS KELAS',
                 peran: 'Sekretaris',
                 bio: 'Mengurus administrasi, absensi, serta catatan kegiatan harian kelas.',
-                foto: 'https://via.placeholder.com/150'
+                foto: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=85&w=800'
             },
             {
                 nama: 'Marsella Dwi Mulyani',
                 kategori: 'ANGGOTA',
                 peran: 'Siswa / Anggota',
                 bio: 'Siswa aktif XI TKJ 2 yang gemar belajar jaringan komputer.',
-                foto: 'https://via.placeholder.com/150'
+                foto: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=85&w=800'
             },
             {
                 nama: 'Sakinah Arafah',
                 kategori: 'ANGGOTA',
                 peran: 'Siswa / Anggota',
                 bio: 'Anggota tim kreatif kelas yang bersemangat.',
-                foto: 'https://via.placeholder.com/150'
+                foto: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=85&w=800'
+            },
+            {
+                nama: 'Rizki Ramadhan',
+                kategori: 'ANGGOTA',
+                peran: 'Siswa / Anggota',
+                bio: 'Jagoan troubleshooting jaringan dan perangkat keras lab.',
+                foto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=85&w=800'
             }
         ];
 
@@ -1097,16 +1189,28 @@
 
         const defaultGaleri = [
             {
-                judul: 'Kerja bakti buat kostum Fashion Show',
-                deskripsi: 'Proses pembuatan kostum dari bahan daur ulang untuk persiapan lomba antar kelas.',
-                tanggal: '12 Agustus 2026',
-                url: 'https://via.placeholder.com/600x400'
+                judul: 'Praktikum Merakit Jaringan LAN',
+                deskripsi: 'Kegiatan uji coba kabel UTP dan konfigurasi switch di laboratorium komputer.',
+                tanggal: '10 Agustus 2026',
+                url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=85&w=1200'
             },
             {
-                judul: 'Foto bersama wali kelas',
-                deskripsi: 'Momen kebersamaan setelah pelaksanaan upacara bendera HUT RI.',
+                judul: 'Kerja Bakti Dekorasi Kelas',
+                deskripsi: 'Kekompakan anak-anak XI TKJ 2 memperindah ruang kelas menyambut perlombaan.',
+                tanggal: '14 Agustus 2026',
+                url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=85&w=1200'
+            },
+            {
+                judul: 'Upacara Peringatan HUT Kemerdekaan',
+                deskripsi: 'Foto bersama seluruh warga kelas mengenakan atribut resmi seusai upacara.',
                 tanggal: '17 Agustus 2026',
-                url: 'https://via.placeholder.com/600x400'
+                url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=85&w=1200'
+            },
+            {
+                judul: 'Jam Istirahat Bersama di Kantin',
+                deskripsi: 'Momen santai melepas penat setelah jam pelajaran praktik jaringan yang melelahkan.',
+                tanggal: '20 Agustus 2026',
+                url: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=85&w=1200'
             }
         ];
 
@@ -1121,6 +1225,104 @@
 
         const textElements = ['siteLogoText', 'textHeroTitle', 'textHeroSubtitle', 'textAnggotaTitle', 'textAnggotaSub', 'textJadwalTitle', 'textJadwalSub', 'textSaranTitle', 'textGaleriTitle', 'textGaleriSub', 'textMottoTitle', 'textMotto1', 'textMotto2', 'textFooter'];
 
+        /* --- Logika Preset & Tema Custom --- */
+        const themePresets = {
+            cyberpunk: { bgPrimary: '#0b1329', bgCard: '#172547', accentCyan: '#00f2fe', accentPink: '#ff2a74', textMain: '#f1f5f9', textMuted: '#94a3b8' },
+            emerald: { bgPrimary: '#061a14', bgCard: '#0f2e23', accentCyan: '#00ffa3', accentPink: '#ffb703', textMain: '#e6f4f1', textMuted: '#89b6a9' },
+            sunset: { bgPrimary: '#1a0d14', bgCard: '#2d1624', accentCyan: '#ff7b00', accentPink: '#ff0054', textMain: '#fff1f2', textMuted: '#b894a4' },
+            midnight: { bgPrimary: '#0d0d1a', bgCard: '#18182e', accentCyan: '#8a2be2', accentPink: '#00ffff', textMain: '#f3f4f6', textMuted: '#9ca3af' }
+        };
+
+        function terapkanPresetTema(namaPreset) {
+            const p = themePresets[namaPreset];
+            if (!p) return;
+
+            document.getElementById('inputBgPrimary').value = p.bgPrimary;
+            document.getElementById('inputBgCard').value = p.bgCard;
+            document.getElementById('inputAccentCyan').value = p.accentCyan;
+            document.getElementById('inputAccentPink').value = p.accentPink;
+            document.getElementById('inputTextMain').value = p.textMain;
+            document.getElementById('inputTextMuted').value = p.textMuted;
+
+            terapkanTemaCustom();
+        }
+
+        function terapkanTemaCustom() {
+            const bgPrimary = document.getElementById('inputBgPrimary').value;
+            const bgCard = document.getElementById('inputBgCard').value;
+            const accentCyan = document.getElementById('inputAccentCyan').value;
+            const accentPink = document.getElementById('inputAccentPink').value;
+            const textMain = document.getElementById('inputTextMain').value;
+            const textMuted = document.getElementById('inputTextMuted').value;
+            const globalFont = document.getElementById('inputGlobalFont').value;
+
+            const root = document.documentElement;
+            root.style.setProperty('--bg-primary', bgPrimary);
+            root.style.setProperty('--bg-secondary', shiftColor(bgPrimary, 15));
+            root.style.setProperty('--bg-card', hexToRgba(bgCard, 0.6));
+            root.style.setProperty('--bg-card-hover', hexToRgba(bgCard, 0.9));
+            root.style.setProperty('--accent-cyan', accentCyan);
+            root.style.setProperty('--accent-blue', accentCyan);
+            root.style.setProperty('--accent-pink', accentPink);
+            root.style.setProperty('--text-main', textMain);
+            root.style.setProperty('--text-muted', textMuted);
+            root.style.setProperty('--border-highlight', hexToRgba(accentCyan, 0.3));
+            root.style.setProperty('--global-font', globalFont);
+
+            const themeConfig = { bgPrimary, bgCard, accentCyan, accentPink, textMain, textMuted, globalFont };
+            localStorage.setItem('custom_theme_config', JSON.stringify(themeConfig));
+
+            alert("Tema dan font website berhasil diperbarui!");
+        }
+
+        function resetTemaDefault() {
+            localStorage.removeItem('custom_theme_config');
+            location.reload();
+        }
+
+        function muatTemaTersimpan() {
+            const saved = localStorage.getItem('custom_theme_config');
+            if (saved) {
+                const config = JSON.parse(saved);
+                document.getElementById('inputBgPrimary').value = config.bgPrimary;
+                document.getElementById('inputBgCard').value = config.bgCard;
+                document.getElementById('inputAccentCyan').value = config.accentCyan;
+                document.getElementById('inputAccentPink').value = config.accentPink;
+                document.getElementById('inputTextMain').value = config.textMain;
+                document.getElementById('inputTextMuted').value = config.textMuted;
+                document.getElementById('inputGlobalFont').value = config.globalFont;
+
+                const root = document.documentElement;
+                root.style.setProperty('--bg-primary', config.bgPrimary);
+                root.style.setProperty('--bg-secondary', shiftColor(config.bgPrimary, 15));
+                root.style.setProperty('--bg-card', hexToRgba(config.bgCard, 0.6));
+                root.style.setProperty('--bg-card-hover', hexToRgba(config.bgCard, 0.9));
+                root.style.setProperty('--accent-cyan', config.accentCyan);
+                root.style.setProperty('--accent-blue', config.accentCyan);
+                root.style.setProperty('--accent-pink', config.accentPink);
+                root.style.setProperty('--text-main', config.textMain);
+                root.style.setProperty('--text-muted', config.textMuted);
+                root.style.setProperty('--border-highlight', hexToRgba(config.accentCyan, 0.3));
+                root.style.setProperty('--global-font', config.globalFont);
+            }
+        }
+
+        function hexToRgba(hex, alpha) {
+            let c = hex.replace('#', '');
+            if (c.length === 3) c = c.split('').map(x => x + x).join('');
+            const num = parseInt(c, 16);
+            return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+        }
+
+        function shiftColor(hex, percent) {
+            let num = parseInt(hex.replace('#',''), 16),
+                amt = Math.round(2.55 * percent),
+                R = (num >> 16) + amt,
+                G = (num >> 8 & 0x00FF) + amt,
+                B = (num & 0x0000FF) + amt;
+            return `#${(0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1)}`;
+        }
+
         /* --- Logika Navigasi Menu Titik Tiga --- */
         function toggleMenu() {
             const dropdown = document.getElementById('dropdownNav');
@@ -1132,7 +1334,6 @@
             dropdown.classList.remove('show');
         }
 
-        // Menutup dropdown jika diklik di luar menu
         window.addEventListener('click', function(e) {
             const menuBtn = document.querySelector('.menu-toggle-btn');
             const dropdown = document.getElementById('dropdownNav');
@@ -1147,7 +1348,6 @@
 
         window.addEventListener('scroll', function() {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
             if (scrollTop > lastScrollTop && scrollTop > 100) {
                 mainHeader.classList.add('nav-hidden');
                 tutupMenu();
@@ -1169,8 +1369,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const result = e.target.result;
-                    updateLogoTampilan(result);
+                    updateLogoTampilan(e.target.result);
                     alert("Logo berhasil diperbarui dari perangkat Anda!");
                 };
                 reader.readAsDataURL(file);
@@ -1456,7 +1655,7 @@
             const kategori = document.getElementById('inputKategoriAnggota').value;
             const peran = document.getElementById('inputPeranAnggota').value.trim();
             const bio = document.getElementById('inputBioAnggota').value.trim();
-            let foto = document.getElementById('inputFotoAnggota').value.trim() || 'https://via.placeholder.com/150';
+            let foto = document.getElementById('inputFotoAnggota').value.trim() || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=85&w=800';
             const editIndex = parseInt(document.getElementById('editAnggotaIndex').value);
 
             if (!nama || !peran) {
@@ -1601,13 +1800,14 @@
             window.open(url, '_blank');
         }
 
-        // Event Listener Tombol Admin Lintas Perangkat (HP, Tablet, PC)
         document.addEventListener('DOMContentLoaded', function() {
+            muatTemaTersimpan();
+            
             const adminBtn = document.getElementById('btnAdminTrigger');
             if (adminBtn) {
                 let touched = false;
 
-                adminBtn.addEventListener('touchend', function(e) {
+                adminBtn.addEventListener('touched', function(e) {
                     e.preventDefault();
                     touched = true;
                     bukaAdmin();
@@ -1622,7 +1822,6 @@
             }
         });
 
-        // Inisialisasi awal
         renderAnggota();
         renderJadwal();
         renderGaleri();
