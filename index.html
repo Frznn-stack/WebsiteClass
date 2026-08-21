@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XI TKJ 2 — Cyber Mimpi</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0b1329;
+            --bg-secondary: #111c38;
+            --bg-card: rgba(23, 37, 71, 0.6);
+            --bg-card-hover: rgba(30, 48, 90, 0.8);
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-pink: #ff2a74;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(0, 242, 254, 0.3);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Indikator Mode Edit */
+        body.edit-mode [contenteditable="true"] {
+            outline: 2px dashed var(--accent-cyan) !important;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: rgba(0, 242, 254, 0.1);
+        }
+
+        body.edit-mode [contenteditable="true"]:focus {
+            outline: 2px solid var(--accent-pink) !important;
+            background: rgba(255, 42, 116, 0.15);
+        }
+
+        body.edit-mode img {
+            outline: 3px dashed var(--accent-cyan) !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease;
+        }
+
+        body.edit-mode img:hover {
+            outline: 3px solid var(--accent-pink) !important;
+            opacity: 0.85;
+        }
+
+        img {
+            cursor: pointer;
+        }
+
+        /* Floating Save Bar */
+        #floatingEditBar {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #ff2a74, #ff6b00);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(255, 42, 116, 0.4);
+            z-index: 3000;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        #floatingEditBar button {
+            background: #ffffff;
+            color: #ff2a74;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #floatingEditBar button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Header & Navigation Bar Sticky */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(11, 19, 41, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 8%;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        header.nav-hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo-img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--accent-cyan);
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Menu Titik Tiga (Dropdown Nav) */
+        .nav-wrapper {
+            position: relative;
+        }
+
+        .menu-toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 1.5rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle-btn:hover {
+            background: rgba(0, 242, 254, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-highlight);
+            border-radius: 16px;
+            padding: 10px;
+            width: 180px;
+            box-shadow: var(--glass-shadow);
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1001;
+            backdrop-filter: blur(15px);
+        }
+
+        .dropdown-menu.show {
+            display: flex;
+        }
+
+        .dropdown-menu a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .dropdown-menu a:hover {
+            color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.1);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 9, 20, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-highlight);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 550px;
+            padding: 30px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .modal-content h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .admin-group {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .admin-group h4 {
+            color: var(--text-main);
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .admin-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .admin-group input, .admin-group select, .admin-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .admin-group input:focus, .admin-group select:focus, .admin-group textarea:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .admin-group textarea {
+            height: 80px;
+            resize: none;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #0b1329;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ff4757, #ff6b81) !important;
+            color: white !important;
+        }
+
+        .btn-close {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            margin-top: 15px;
+        }
+
+        .btn-close:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        /* Lightbox */
+        .lightbox-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-highlight);
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .lightbox-content img {
+            width: 100%;
+            max-height: 65vh;
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            background: var(--bg-primary);
+        }
+
+        /* Section Global */
+        section {
+            padding: 110px 8% 60px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Hero Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.12) 0%, rgba(11, 19, 41, 0) 70%),
+                        linear-gradient(180deg, #0b1329 0%, #0d1733 100%);
+            padding-top: 120px;
+            position: relative;
+        }
+
+        .hero-logo-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .hero-logo-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            z-index: 1;
+            opacity: 0.7;
+            filter: blur(8px);
+        }
+
+        .hero-logo {
+            position: relative;
+            z-index: 2;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .hero-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .hero-subtitle {
+            max-width: 650px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        /* Filter Tabs */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #0b1329;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+        }
+
+        /* Anggota Cards */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .member-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .member-card:hover {
+            transform: translateY(-8px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .member-img-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .member-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-highlight);
+            transition: transform 0.3s ease;
+        }
+
+        .member-card:hover .member-img {
+            transform: scale(1.05);
+        }
+
+        .member-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .member-role {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        .badge-kategori {
+            font-size: 0.68rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge-walikelas {
+            background: rgba(255, 42, 116, 0.15);
+            color: #ff2a74;
+            border: 1px solid rgba(255, 42, 116, 0.3);
+        }
+
+        .badge-pengurus {
+            background: rgba(0, 242, 254, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+
+        .badge-anggota {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Jadwal Cards */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .day-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-highlight);
+            background: var(--bg-card-hover);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .day-title {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .day-card ul {
+            list-style: none;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .day-card li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Kotak Saran */
+        .saran-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 35px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .saran-box textarea {
+            width: 100%;
+            height: 120px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            resize: none;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .saran-box textarea:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .saran-box button {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+        }
+
+        .saran-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Galeri */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            text-align: left;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-highlight);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-info {
+            padding: 18px;
+        }
+
+        .gallery-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .gallery-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .gallery-date {
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .manage-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .btn-group-sm {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-small-edit {
+            background: var(--accent-cyan);
+            color: #0b1329;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .btn-small-del {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        /* Motto Section */
+        .motto-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 750px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .motto-box p {
+            font-style: italic;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* CSS FOOTER & TOMBOL ADMIN RESPONSIF */
+        footer {
+            background: #070c1b;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            z-index: 10;
+        }
+
+        .hidden-admin-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer !important;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+            
+            /* Diperbarui agar mudah diklik di HP & PC */
+            display: inline-block;
+            padding: 8px 12px;
+            margin: -8px -12px;
+            -webkit-tap-highlight-color: rgba(0, 242, 254, 0.2);
+            touch-action: manipulation;
+            position: relative;
+            z-index: 50;
+            user-select: none;
+        }
+
+        .hidden-admin-btn:hover,
+        .hidden-admin-btn:active {
+            color: var(--accent-cyan);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 5%;
+            }
+            .hero-title {
+                font-size: 2.4rem;
+            }
+            .hero-subtitle {
+                font-size: 0.95rem;
+            }
+            section {
+                padding: 90px 5% 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Bar saat Mode Edit -->
+    <div id="floatingEditBar">
+        <span>✏️ Mode Edit Teks & Foto Aktif</span>
+        <button onclick="simpanSemuaPerubahanTeks()">Simpan Teks</button>
+        <button onclick="matikanModeEdit()" style="background: rgba(255,255,255,0.2); color: white;">Selesai</button>
+    </div>
+
+    <!-- Navigation Bar Sticky dengan Auto-Hide & Titik Tiga -->
+    <header id="mainHeader">
+        <a href="#home" class="logo-container">
+            <img src="https://via.placeholder.com/150" alt="Logo" class="nav-logo-img" id="navLogoImg">
+            <span class="logo-text" id="siteLogoText">Cyber Mimpi</span>
+        </a>
+        <div class="nav-wrapper">
+            <button class="menu-toggle-btn" onclick="toggleMenu()" title="Menu Navigasi">⋮</button>
+            <div class="dropdown-menu" id="dropdownNav">
+                <a href="#home" onclick="tutupMenu()">Home</a>
+                <a href="#anggota" onclick="tutupMenu()">Anggota</a>
+                <a href="#jadwal" onclick="tutupMenu()">Jadwal Pelajaran</a>
+                <a href="#saran" onclick="tutupMenu()">Kotak Saran</a>
+                <a href="#galeri" onclick="tutupMenu()">Galeri</a>
+                <a href="#motto" onclick="tutupMenu()">Motto</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal Admin -->
+    <div id="adminModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Panel Pengaturan Admin</h3>
+
+            <!-- Pengaturan Logo & Identitas Utama -->
+            <div class="admin-group" style="border-color: var(--accent-cyan);">
+                <h4>🖼️ Pengaturan Logo & Tulisan Utama</h4>
+                
+                <label>Pilih File Logo Baru (Upload dari Perangkat):</label>
+                <input type="file" id="inputUploadLogo" accept="image/*" onchange="uploadLogoFile(event)">
+                
+                <label>Atau Gunakan URL Foto Logo (https://...):</label>
+                <input type="text" id="inputUrlLogo" placeholder="https://domain.com/logo.png">
+                <button class="btn-action" style="margin-bottom: 12px;" onclick="simpanLogoUrl()">Ganti Logo via URL</button>
+
+                <hr style="border-color: var(--border-color); margin: 15px 0;">
+
+                <label>Nama Kelas / Title Utama:</label>
+                <input type="text" id="inputEditHeroTitle" placeholder="Contoh: Cyber Mimpi XI TKJ 2">
+
+                <label>Deskripsi Subtitle Kelas:</label>
+                <textarea id="inputEditHeroSubtitle" placeholder="Deskripsi ringkas kelas..."></textarea>
+                
+                <button class="btn-action" style="background: linear-gradient(135deg, #00f2fe, #4facfe);" onclick="simpanPengaturanIdentitas()">Simpan Perubahan Identitas</button>
+            </div>
+
+            <div class="admin-group" style="border-color: var(--accent-pink);">
+                <h4>⚡ Edit Teks Langsung di Halaman</h4>
+                <p style="font-size:0.8rem; color: var(--text-muted); margin-bottom:12px;">Klik tombol di bawah ini untuk mengubah tulisan atau mengklik foto mana saja langsung pada tampilan website.</p>
+                <button class="btn-action" style="background: linear-gradient(135deg, #ff2a74, #ff6b00); color:white;" onclick="aktifkanModeEdit()">Aktifkan Mode Edit Langsung</button>
+            </div>
+            
+            <!-- 1. Kelola Anggota -->
+            <div class="admin-group">
+                <h4 id="formAnggotaTitle">1. Tambah / Edit Anggota Kelas</h4>
+                <input type="hidden" id="editAnggotaIndex" value="-1">
+                <input type="text" id="inputNamaAnggota" placeholder="Nama Lengkap">
+                
+                <select id="inputKategoriAnggota">
+                    <option value="WALI KELAS">WALI KELAS</option>
+                    <option value="PENGURUS KELAS">PENGURUS KELAS</option>
+                    <option value="ANGGOTA" selected>ANGGOTA</option>
+                </select>
+
+                <input type="text" id="inputPeranAnggota" placeholder="Detail Jabatan (misal: Wali Kelas, Ketua Kelas, Siswa)">
+                <textarea id="inputBioAnggota" placeholder="Deskripsi Singkat / Bio..."></textarea>
+                <input type="text" id="inputFotoAnggota" placeholder="URL Foto Profil (https...)">
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-action" onclick="simpanAnggota()">Simpan Anggota</button>
+                    <button class="btn-action btn-close" style="margin:0;" onclick="resetFormAnggota()">Batal Edit</button>
+                </div>
+
+                <h5 style="color:var(--accent-cyan); margin:15px 0 10px; font-size:0.85rem;">Daftar Anggota Saat Ini:</h5>
+                <div id="daftarKelolaAnggota" style="max-height: 150px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- 2. Edit Jadwal -->
+            <div class="admin-group">
+                <h4>2. Edit Jadwal Pelajaran</h4>
+                <select id="pilihHari">
+                    <option value="Senin">Senin</option>
+                    <option value="Selasa">Selasa</option>
+                    <option value="Rabu">Rabu</option>
+                    <option value="Kamis">Kamis</option>
+                    <option value="Jumat">Jumat</option>
+                </select>
+                <input type="text" id="inputPelajaran" placeholder="Masukkan Mata Pelajaran (Pisahkan koma)">
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-action" onclick="simpanJadwal()">Simpan Jadwal</button>
+                    <button class="btn-action btn-delete" onclick="kosongkanJadwalHari()">Kosongkan Hari Ini</button>
+                </div>
+            </div>
+
+            <!-- 3. Kelola Foto Galeri -->
+            <div class="admin-group">
+                <h4 id="formFotoTitle">3. Tambah / Edit Foto Galeri</h4>
+                <input type="hidden" id="editFotoIndex" value="-1">
+                <input type="text" id="inputJudulFoto" placeholder="Judul Foto">
+                <textarea id="inputDeskripsiFoto" placeholder="Deskripsi Singkat Foto..."></textarea>
+                <input type="text" id="inputTanggalFoto" placeholder="Tanggal (Contoh: 12 Agustus 2026)">
+                <input type="text" id="inputUrlFoto" placeholder="URL Gambar (https...)">
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-action" onclick="simpanFotoGaleri()">Simpan Foto</button>
+                    <button class="btn-action btn-close" style="margin:0;" onclick="resetFormFoto()">Batal Edit</button>
+                </div>
+
+                <h5 style="color:var(--accent-cyan); margin:15px 0 10px; font-size:0.85rem;">Daftar Foto Saat Ini:</h5>
+                <div id="daftarKelolaGaleri" style="max-height: 150px; overflow-y: auto;"></div>
+            </div>
+
+            <button class="btn-action btn-close" onclick="tutupModal('adminModal')">Tutup Panel Admin</button>
+        </div>
+    </div>
+
+    <!-- Modal Ubah Foto Langsung (Mode Edit) -->
+    <div id="changeImageModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px;">
+            <h3>🖼️ Ganti Foto Langsung</h3>
+            <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:15px; text-align:center;">Masukkan URL/Link gambar baru di bawah ini:</p>
+            <input type="text" id="inputDirectImageUrl" placeholder="https://domain.com/foto.jpg">
+            <div style="display:flex; gap:10px;">
+                <button class="btn-action" onclick="terapkanGantiFoto()">Ganti Foto</button>
+                <button class="btn-action btn-close" style="margin:0;" onclick="tutupModal('changeImageModal')">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail Jadwal -->
+    <div id="jadwalModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalHariTitle">Jadwal Hari</h3>
+            <div style="background: var(--bg-primary); padding:20px; border-radius:12px; margin-bottom:20px; border: 1px solid var(--border-color);">
+                <ul id="modalPelajaranList" style="list-style:none; text-align:left; line-height:2;"></ul>
+            </div>
+            <button class="btn-action btn-close" onclick="tutupModal('jadwalModal')">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Modal Lightbox -->
+    <div id="lightboxModal" class="modal-overlay" onclick="tutupModal('lightboxModal')">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="lightboxImg" src="" alt="Gambar Perbesar">
+            <h3 id="lightboxTitle" style="color: var(--text-main); margin-bottom:5px;"></h3>
+            <p id="lightboxDesc" style="color: var(--text-muted); font-size:0.95rem; margin-bottom:10px;"></p>
+            <p id="lightboxDate" style="color: var(--accent-cyan); font-size:0.85rem; margin-bottom:15px; font-weight:600;"></p>
+            <button class="btn-action btn-close" onclick="tutupModal('lightboxModal')">Tutup Gambar</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home">
+        <div class="hero-logo-wrapper">
+            <img src="https://via.placeholder.com/150" alt="Logo Kelas" class="hero-logo" id="heroLogoImg" onclick="handleImgClick(event, 'hero')">
+        </div>
+        <h1 class="hero-title" id="textHeroTitle">Cyber Mimpi XI TKJ 2</h1>
+        <p class="hero-subtitle" id="textHeroSubtitle">Selamat datang di website resmi kelas kami. Wadah kreativitas, memori kebersamaan, dan informasi seputar kelas XI TKJ 2.</p>
+    </section>
+
+    <!-- Anggota Kelas Section -->
+    <section id="anggota">
+        <h2 class="section-title" id="textAnggotaTitle">Struktur & Anggota Kelas</h2>
+        <p class="section-subtitle" id="textAnggotaSub">Pilih kategori di bawah ini untuk menampilkan daftar anggota kelas</p>
+        
+        <!-- Filter Tabs -->
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterKategori('SEMUA', this)">Semua</button>
+            <button class="tab-btn" onclick="filterKategori('WALI KELAS', this)">Wali Kelas</button>
+            <button class="tab-btn" onclick="filterKategori('PENGURUS KELAS', this)">Pengurus Kelas</button>
+            <button class="tab-btn" onclick="filterKategori('ANGGOTA', this)">Anggota</button>
+        </div>
+
+        <div class="card-container" id="containerAnggota">
+            <!-- Render Dinamis -->
+        </div>
+    </section>
+
+    <!-- Jadwal Pelajaran Section -->
+    <section id="jadwal">
+        <h2 class="section-title" id="textJadwalTitle">Jadwal Pelajaran</h2>
+        <p class="section-subtitle" id="textJadwalSub">Klik pada kartu hari untuk melihat rincian mata pelajaran</p>
+        <div class="schedule-grid" id="containerJadwal">
+            <!-- Render Dinamis -->
+        </div>
+    </section>
+
+    <!-- Kotak Saran -->
+    <section id="saran">
+        <h2 class="section-title" id="textSaranTitle">Kotak Saran & Menfess</h2>
+        <p class="section-subtitle">Sampaikan pesan, masukan, atau salam tanpa ragu secara langsung</p>
+        <div class="saran-box">
+            <textarea id="pesanSaran" placeholder="Tuliskan pesan atau saran Anda di sini..."></textarea>
+            <button onclick="kirimKeWA()">Kirim Pesan via WhatsApp</button>
+        </div>
+    </section>
+
+    <!-- Galeri Section -->
+    <section id="galeri">
+        <h2 class="section-title" id="textGaleriTitle">Galeri Kenangan</h2>
+        <p class="section-subtitle" id="textGaleriSub">Kumpulan momen berharga dan kegiatan bersama</p>
+        <div class="gallery-grid" id="containerGaleri">
+            <!-- Render Dinamis -->
+        </div>
+    </section>
+
+    <!-- Motto Section -->
+    <section id="motto">
+        <h2 class="section-title" id="textMottoTitle">Motto Kelas</h2>
+        <div style="height: 20px;"></div>
+        <div class="motto-box">
+            <p id="textMotto1">"Bukan tentang siapa yang paling hebat, tetapi tentang bagaimana kita tumbuh dan berjuang bersama."</p>
+            <br>
+            <p id="textMotto2">"Di dunia ini tidak ada yang mustahil, semua orang bisa jika mereka mau berusaha."</p>
+        </div>
+    </section>
+
+    <!-- FOOTER & TOMBOL TRIGGER ADMIN -->
+    <footer>
+        <p id="textFooter">
+            &copy; 2026 Cyber Mimpi XI TKJ 2. 
+            <button type="button" class="hidden-admin-btn" id="btnAdminTrigger">
+                All Rights Reserved.
+            </button>
+        </p>
+    </footer>
+
+    <script>
+        const defaultAnggota = [
+            {
+                nama: 'Pak Agus Sobarudin',
+                kategori: 'WALI KELAS',
+                peran: 'Wali Kelas XI TKJ 2',
+                bio: 'Wali kelas XI TKJ 2 yang senantiasa membimbing siswa-siswi menjadi berprestasi.',
+                foto: 'https://via.placeholder.com/150'
+            },
+            {
+                nama: 'Denis Alfarisi',
+                kategori: 'PENGURUS KELAS',
+                peran: 'Ketua Kelas',
+                bio: 'Bertanggung jawab memimpin kelas dan menjadi jembatan antara siswa dengan guru.',
+                foto: 'https://via.placeholder.com/150'
+            },
+            {
+                nama: 'Asih Puspita Dewi',
+                kategori: 'PENGURUS KELAS',
+                peran: 'Sekretaris',
+                bio: 'Mengurus administrasi, absensi, serta catatan kegiatan harian kelas.',
+                foto: 'https://via.placeholder.com/150'
+            },
+            {
+                nama: 'Marsella Dwi Mulyani',
+                kategori: 'ANGGOTA',
+                peran: 'Siswa / Anggota',
+                bio: 'Siswa aktif XI TKJ 2 yang gemar belajar jaringan komputer.',
+                foto: 'https://via.placeholder.com/150'
+            },
+            {
+                nama: 'Sakinah Arafah',
+                kategori: 'ANGGOTA',
+                peran: 'Siswa / Anggota',
+                bio: 'Anggota tim kreatif kelas yang bersemangat.',
+                foto: 'https://via.placeholder.com/150'
+            }
+        ];
+
+        const defaultJadwal = {
+            'Senin': ['Upacara', 'B. Indonesia', 'Matematika'],
+            'Selasa': ['PKK', 'ASJ', 'AIJ'],
+            'Rabu': ['B. Inggris', 'Penjas', 'PAI'],
+            'Kamis': ['TJBL', 'Admin Server'],
+            'Jumat': ['Agama', 'Pemrograman Web']
+        };
+
+        const defaultGaleri = [
+            {
+                judul: 'Kerja bakti buat kostum Fashion Show',
+                deskripsi: 'Proses pembuatan kostum dari bahan daur ulang untuk persiapan lomba antar kelas.',
+                tanggal: '12 Agustus 2026',
+                url: 'https://via.placeholder.com/600x400'
+            },
+            {
+                judul: 'Foto bersama wali kelas',
+                deskripsi: 'Momen kebersamaan setelah pelaksanaan upacara bendera HUT RI.',
+                tanggal: '17 Agustus 2026',
+                url: 'https://via.placeholder.com/600x400'
+            }
+        ];
+
+        const PIN_ADMIN = "1234";
+
+        let dataAnggota = JSON.parse(localStorage.getItem('anggota_kelas')) || defaultAnggota;
+        let dataJadwal = JSON.parse(localStorage.getItem('jadwal_kelas')) || defaultJadwal;
+        let dataGaleri = JSON.parse(localStorage.getItem('galeri_kelas')) || defaultGaleri;
+
+        let activeImageTarget = null;
+        let activeKategoriFilter = 'SEMUA';
+
+        const textElements = ['siteLogoText', 'textHeroTitle', 'textHeroSubtitle', 'textAnggotaTitle', 'textAnggotaSub', 'textJadwalTitle', 'textJadwalSub', 'textSaranTitle', 'textGaleriTitle', 'textGaleriSub', 'textMottoTitle', 'textMotto1', 'textMotto2', 'textFooter'];
+
+        /* --- Logika Navigasi Menu Titik Tiga --- */
+        function toggleMenu() {
+            const dropdown = document.getElementById('dropdownNav');
+            dropdown.classList.toggle('show');
+        }
+
+        function tutupMenu() {
+            const dropdown = document.getElementById('dropdownNav');
+            dropdown.classList.remove('show');
+        }
+
+        // Menutup dropdown jika diklik di luar menu
+        window.addEventListener('click', function(e) {
+            const menuBtn = document.querySelector('.menu-toggle-btn');
+            const dropdown = document.getElementById('dropdownNav');
+            if (menuBtn && dropdown && !menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        /* --- Logika Auto-Hide Navigation Bar --- */
+        let lastScrollTop = 0;
+        const mainHeader = document.getElementById('mainHeader');
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                mainHeader.classList.add('nav-hidden');
+                tutupMenu();
+            } else {
+                mainHeader.classList.remove('nav-hidden');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+
+        /* --- Fungsi Pengaturan Logo & Identitas --- */
+        function updateLogoTampilan(src) {
+            document.getElementById('heroLogoImg').src = src;
+            document.getElementById('navLogoImg').src = src;
+            localStorage.setItem('hero_logo_url', src);
+        }
+
+        function uploadLogoFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const result = e.target.result;
+                    updateLogoTampilan(result);
+                    alert("Logo berhasil diperbarui dari perangkat Anda!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function simpanLogoUrl() {
+            const url = document.getElementById('inputUrlLogo').value.trim();
+            if (url) {
+                updateLogoTampilan(url);
+                alert("Logo berhasil diperbarui via URL!");
+                document.getElementById('inputUrlLogo').value = '';
+            } else {
+                alert("Harap masukkan URL logo yang valid!");
+            }
+        }
+
+        function simpanPengaturanIdentitas() {
+            const newTitle = document.getElementById('inputEditHeroTitle').value.trim();
+            const newSubtitle = document.getElementById('inputEditHeroSubtitle').value.trim();
+
+            if (newTitle) {
+                document.getElementById('textHeroTitle').innerText = newTitle;
+                localStorage.setItem('text_textHeroTitle', newTitle);
+            }
+            if (newSubtitle) {
+                document.getElementById('textHeroSubtitle').innerText = newSubtitle;
+                localStorage.setItem('text_textHeroSubtitle', newSubtitle);
+            }
+
+            alert("Identitas kelas berhasil diperbarui!");
+        }
+
+        function handleImgClick(event, type, index = null) {
+            event.stopPropagation();
+
+            if (document.body.classList.contains('edit-mode')) {
+                activeImageTarget = { type, index };
+                let currentUrl = "";
+
+                if (type === 'hero') currentUrl = document.getElementById('heroLogoImg').src;
+                else if (type === 'anggota') currentUrl = dataAnggota[index].foto;
+                else if (type === 'galeri') currentUrl = dataGaleri[index].url;
+
+                document.getElementById('inputDirectImageUrl').value = currentUrl;
+                document.getElementById('changeImageModal').style.display = 'flex';
+            } 
+            else {
+                const imgModal = document.getElementById('lightboxModal');
+                const imgEl = document.getElementById('lightboxImg');
+                const titleEl = document.getElementById('lightboxTitle');
+                const descEl = document.getElementById('lightboxDesc');
+                const dateEl = document.getElementById('lightboxDate');
+
+                if (type === 'hero') {
+                    imgEl.src = document.getElementById('heroLogoImg').src;
+                    titleEl.innerText = "Logo Kelas Cyber Mimpi";
+                    descEl.innerText = "Logo resmi XI TKJ 2";
+                    dateEl.innerText = "";
+                } else if (type === 'anggota') {
+                    const a = dataAnggota[index];
+                    imgEl.src = a.foto;
+                    titleEl.innerText = `${a.nama} (${a.kategori})`;
+                    descEl.innerText = `${a.peran} - ${a.bio || 'Tidak ada biodata.'}`;
+                    dateEl.innerText = "";
+                } else if (type === 'galeri') {
+                    const g = dataGaleri[index];
+                    imgEl.src = g.url;
+                    titleEl.innerText = g.judul;
+                    descEl.innerText = g.deskripsi || '';
+                    dateEl.innerText = g.tanggal;
+                }
+
+                imgModal.style.display = 'flex';
+            }
+        }
+
+        function filterKategori(kategori, btnEl) {
+            activeKategoriFilter = kategori;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if(btnEl) btnEl.classList.add('active');
+            renderAnggota();
+        }
+
+        function renderAnggota() {
+            const container = document.getElementById('containerAnggota');
+            const listKelola = document.getElementById('daftarKelolaAnggota');
+            container.innerHTML = '';
+            listKelola.innerHTML = '';
+
+            dataAnggota.forEach((a, index) => {
+                let badgeClass = 'badge-anggota';
+                if (a.kategori === 'WALI KELAS') badgeClass = 'badge-walikelas';
+                else if (a.kategori === 'PENGURUS KELAS') badgeClass = 'badge-pengurus';
+
+                if (activeKategoriFilter === 'SEMUA' || a.kategori === activeKategoriFilter) {
+                    container.innerHTML += `
+                        <div class="member-card">
+                            <span class="badge-kategori ${badgeClass}">${a.kategori}</span>
+                            <div class="member-img-wrapper">
+                                <img src="${a.foto}" alt="${a.nama}" class="member-img" onclick="handleImgClick(event, 'anggota', ${index})">
+                            </div>
+                            <div class="member-name">${a.nama}</div>
+                            <div class="member-role">${a.peran}</div>
+                        </div>
+                    `;
+                }
+
+                listKelola.innerHTML += `
+                    <div class="manage-list-item">
+                        <span><b>${a.nama}</b> [${a.kategori}] (${a.peran})</span>
+                        <div class="btn-group-sm">
+                            <button class="btn-small-edit" onclick="editAnggota(${index})">Edit</button>
+                            <button class="btn-small-del" onclick="hapusAnggota(${index})">Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (container.innerHTML === '') {
+                container.innerHTML = `<p style="color:var(--text-muted); font-style:italic; grid-column: 1/-1;">Belum ada data untuk kategori ini.</p>`;
+            }
+        }
+
+        function renderJadwal() {
+            const container = document.getElementById('containerJadwal');
+            container.innerHTML = '';
+            for (let hari in dataJadwal) {
+                let mapelHtml = dataJadwal[hari].length > 0 
+                    ? dataJadwal[hari].map(m => `<li><span>•</span> ${m.trim()}</li>`).join('')
+                    : `<li style="color:var(--text-muted); font-style:italic;">Libur / Tidak ada jadwal</li>`;
+                
+                container.innerHTML += `
+                    <div class="day-card" onclick="bukaDetailJadwal('${hari}')">
+                        <div class="day-title">${hari}</div>
+                        <ul>${mapelHtml}</ul>
+                    </div>
+                `;
+            }
+        }
+
+        function renderGaleri() {
+            const container = document.getElementById('containerGaleri');
+            const listKelola = document.getElementById('daftarKelolaGaleri');
+            container.innerHTML = '';
+            listKelola.innerHTML = '';
+
+            dataGaleri.forEach((g, index) => {
+                container.innerHTML += `
+                    <div class="gallery-card">
+                        <img src="${g.url}" alt="${g.judul}" onclick="handleImgClick(event, 'galeri', ${index})">
+                        <div class="gallery-info">
+                            <div class="gallery-title">${g.judul}</div>
+                            <div class="gallery-desc">${g.deskripsi || ''}</div>
+                            <div class="gallery-date">${g.tanggal}</div>
+                        </div>
+                    </div>
+                `;
+
+                listKelola.innerHTML += `
+                    <div class="manage-list-item">
+                        <span><b>${g.judul}</b> (${g.tanggal})</span>
+                        <div class="btn-group-sm">
+                            <button class="btn-small-edit" onclick="editFotoGaleri(${index})">Edit</button>
+                            <button class="btn-small-del" onclick="hapusFotoGaleri(${index})">Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function terapkanGantiFoto() {
+            const newUrl = document.getElementById('inputDirectImageUrl').value.trim();
+            if (!newUrl) {
+                alert("Masukkan URL gambar yang valid!");
+                return;
+            }
+
+            if (activeImageTarget.type === 'hero') {
+                updateLogoTampilan(newUrl);
+            } else if (activeImageTarget.type === 'anggota') {
+                dataAnggota[activeImageTarget.index].foto = newUrl;
+                localStorage.setItem('anggota_kelas', JSON.stringify(dataAnggota));
+                renderAnggota();
+            } else if (activeImageTarget.type === 'galeri') {
+                dataGaleri[activeImageTarget.index].url = newUrl;
+                localStorage.setItem('galeri_kelas', JSON.stringify(dataGaleri));
+                renderGaleri();
+            }
+
+            if (document.body.classList.contains('edit-mode')) {
+                aktifkanModeEdit();
+            }
+
+            tutupModal('changeImageModal');
+            alert("Foto berhasil diperbarui!");
+        }
+
+        function aktifkanModeEdit() {
+            document.body.classList.add('edit-mode');
+            document.getElementById('floatingEditBar').style.display = 'flex';
+
+            document.querySelectorAll('h1, h2, h3, h4, p, span, a, div.member-name, div.member-role, div.gallery-title, div.gallery-desc').forEach(el => {
+                el.setAttribute('contenteditable', 'true');
+            });
+
+            tutupModal('adminModal');
+        }
+
+        function matikanModeEdit() {
+            document.body.classList.remove('edit-mode');
+            document.getElementById('floatingEditBar').style.display = 'none';
+
+            document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                el.removeAttribute('contenteditable');
+            });
+        }
+
+        function simpanSemuaPerubahanTeks() {
+            textElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    localStorage.setItem('text_' + id, el.innerText);
+                }
+            });
+
+            matikanModeEdit();
+            alert("Semua perubahan teks berhasil disimpan!");
+        }
+
+        function muatTeksTersimpan() {
+            textElements.forEach(id => {
+                const saved = localStorage.getItem('text_' + id);
+                const el = document.getElementById(id);
+                if (saved && el) {
+                    el.innerText = saved;
+                }
+            });
+
+            const heroLogo = localStorage.getItem('hero_logo_url');
+            if (heroLogo) {
+                document.getElementById('heroLogoImg').src = heroLogo;
+                document.getElementById('navLogoImg').src = heroLogo;
+            }
+        }
+
+        function tutupModal(idModal) {
+            document.getElementById(idModal).style.display = 'none';
+        }
+
+        function bukaAdmin() {
+            let pwd = prompt("Masukkan PIN Admin:");
+            if (pwd === PIN_ADMIN) {
+                document.getElementById('inputEditHeroTitle').value = document.getElementById('textHeroTitle').innerText;
+                document.getElementById('inputEditHeroSubtitle').value = document.getElementById('textHeroSubtitle').innerText;
+                document.getElementById('adminModal').style.display = 'flex';
+                renderAnggota();
+                renderGaleri();
+            } else if (pwd !== null) {
+                alert("PIN Admin Salah!");
+            }
+        }
+
+        function bukaDetailJadwal(hari) {
+            if (document.body.classList.contains('edit-mode')) return;
+            document.getElementById('modalHariTitle').innerText = `Jadwal Pelajaran - ${hari}`;
+            const listContainer = document.getElementById('modalPelajaranList');
+            listContainer.innerHTML = '';
+            
+            if (dataJadwal[hari].length === 0) {
+                listContainer.innerHTML = `<li style="color:var(--text-muted);">Tidak ada jadwal pelajaran untuk hari ini.</li>`;
+            } else {
+                dataJadwal[hari].forEach((mapel, index) => {
+                    listContainer.innerHTML += `<li style="font-size:1rem; color:var(--text-main);"><b>${index + 1}.</b> ${mapel.trim()}</li>`;
+                });
+            }
+
+            document.getElementById('jadwalModal').style.display = 'flex';
+        }
+
+        function simpanAnggota() {
+            const nama = document.getElementById('inputNamaAnggota').value.trim();
+            const kategori = document.getElementById('inputKategoriAnggota').value;
+            const peran = document.getElementById('inputPeranAnggota').value.trim();
+            const bio = document.getElementById('inputBioAnggota').value.trim();
+            let foto = document.getElementById('inputFotoAnggota').value.trim() || 'https://via.placeholder.com/150';
+            const editIndex = parseInt(document.getElementById('editAnggotaIndex').value);
+
+            if (!nama || !peran) {
+                alert("Nama dan Detail Jabatan wajib diisi!");
+                return;
+            }
+
+            const item = { nama, kategori, peran, bio, foto };
+
+            if (editIndex >= 0) {
+                dataAnggota[editIndex] = item;
+                alert("Data anggota berhasil diperbarui!");
+            } else {
+                dataAnggota.push(item);
+                alert("Anggota baru berhasil ditambahkan!");
+            }
+
+            localStorage.setItem('anggota_kelas', JSON.stringify(dataAnggota));
+            resetFormAnggota();
+            renderAnggota();
+        }
+
+        function editAnggota(index) {
+            const a = dataAnggota[index];
+            document.getElementById('formAnggotaTitle').innerText = `1. Edit Anggota (${a.nama})`;
+            document.getElementById('editAnggotaIndex').value = index;
+            document.getElementById('inputNamaAnggota').value = a.nama;
+            document.getElementById('inputKategoriAnggota').value = a.kategori || 'ANGGOTA';
+            document.getElementById('inputPeranAnggota').value = a.peran;
+            document.getElementById('inputBioAnggota').value = a.bio || '';
+            document.getElementById('inputFotoAnggota').value = a.foto;
+        }
+
+        function resetFormAnggota() {
+            document.getElementById('formAnggotaTitle').innerText = '1. Tambah / Edit Anggota Kelas';
+            document.getElementById('editAnggotaIndex').value = '-1';
+            document.getElementById('inputNamaAnggota').value = '';
+            document.getElementById('inputKategoriAnggota').value = 'ANGGOTA';
+            document.getElementById('inputPeranAnggota').value = '';
+            document.getElementById('inputBioAnggota').value = '';
+            document.getElementById('inputFotoAnggota').value = '';
+        }
+
+        function hapusAnggota(index) {
+            if (confirm(`Yakin ingin menghapus "${dataAnggota[index].nama}" dari daftar?`)) {
+                dataAnggota.splice(index, 1);
+                localStorage.setItem('anggota_kelas', JSON.stringify(dataAnggota));
+                renderAnggota();
+            }
+        }
+
+        function simpanJadwal() {
+            let hari = document.getElementById('pilihHari').value;
+            let textPelajaran = document.getElementById('inputPelajaran').value;
+
+            if (!textPelajaran.trim()) {
+                alert("Masukkan nama pelajaran!");
+                return;
+            }
+
+            dataJadwal[hari] = textPelajaran.split(',');
+            localStorage.setItem('jadwal_kelas', JSON.stringify(dataJadwal));
+            renderJadwal();
+            document.getElementById('inputPelajaran').value = '';
+            alert(`Jadwal hari ${hari} berhasil diperbarui!`);
+        }
+
+        function kosongkanJadwalHari() {
+            let hari = document.getElementById('pilihHari').value;
+            if (confirm(`Yakin ingin mengosongkan jadwal untuk hari ${hari}?`)) {
+                dataJadwal[hari] = [];
+                localStorage.setItem('jadwal_kelas', JSON.stringify(dataJadwal));
+                renderJadwal();
+                alert(`Jadwal hari ${hari} berhasil dikosongkan!`);
+            }
+        }
+
+        function simpanFotoGaleri() {
+            let judul = document.getElementById('inputJudulFoto').value.trim();
+            let deskripsi = document.getElementById('inputDeskripsiFoto').value.trim();
+            let tanggal = document.getElementById('inputTanggalFoto').value.trim();
+            let url = document.getElementById('inputUrlFoto').value.trim();
+            const editIndex = parseInt(document.getElementById('editFotoIndex').value);
+
+            if (!judul || !tanggal || !url) {
+                alert("Kolom Judul, Tanggal, dan URL Gambar harus diisi!");
+                return;
+            }
+
+            const item = { judul, deskripsi, tanggal, url };
+
+            if (editIndex >= 0) {
+                dataGaleri[editIndex] = item;
+                alert("Foto galeri berhasil diperbarui!");
+            } else {
+                dataGaleri.unshift(item);
+                alert("Foto baru berhasil ditambahkan!");
+            }
+
+            localStorage.setItem('galeri_kelas', JSON.stringify(dataGaleri));
+            resetFormFoto();
+            renderGaleri();
+        }
+
+        function editFotoGaleri(index) {
+            const g = dataGaleri[index];
+            document.getElementById('formFotoTitle').innerText = `3. Edit Foto (${g.judul})`;
+            document.getElementById('editFotoIndex').value = index;
+            document.getElementById('inputJudulFoto').value = g.judul;
+            document.getElementById('inputDeskripsiFoto').value = g.deskripsi || '';
+            document.getElementById('inputTanggalFoto').value = g.tanggal;
+            document.getElementById('inputUrlFoto').value = g.url;
+        }
+
+        function resetFormFoto() {
+            document.getElementById('formFotoTitle').innerText = '3. Tambah / Edit Foto Galeri';
+            document.getElementById('editFotoIndex').value = '-1';
+            document.getElementById('inputJudulFoto').value = '';
+            document.getElementById('inputDeskripsiFoto').value = '';
+            document.getElementById('inputTanggalFoto').value = '';
+            document.getElementById('inputUrlFoto').value = '';
+        }
+
+        function hapusFotoGaleri(index) {
+            if (confirm(`Yakin ingin menghapus foto "${dataGaleri[index].judul}"?`)) {
+                dataGaleri.splice(index, 1);
+                localStorage.setItem('galeri_kelas', JSON.stringify(dataGaleri));
+                renderGaleri();
+            }
+        }
+
+        function kirimKeWA() {
+            const pesan = document.getElementById('pesanSaran').value;
+            const nomorAdmin = "628123456789"; 
+            
+            if (pesan.trim() === "") {
+                alert("Harap tuliskan saran atau pesan Anda terlebih dahulu!");
+                return;
+            }
+
+            const url = `https://api.whatsapp.com/send?phone=${nomorAdmin}&text=${encodeURIComponent('Pesan/Menfess dari Web Kelas:\n\n' + pesan)}`;
+            window.open(url, '_blank');
+        }
+
+        // Event Listener Tombol Admin Lintas Perangkat (HP, Tablet, PC)
+        document.addEventListener('DOMContentLoaded', function() {
+            const adminBtn = document.getElementById('btnAdminTrigger');
+            if (adminBtn) {
+                let touched = false;
+
+                adminBtn.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    touched = true;
+                    bukaAdmin();
+                    setTimeout(() => { touched = false; }, 500);
+                });
+
+                adminBtn.addEventListener('click', function(e) {
+                    if (!touched) {
+                        bukaAdmin();
+                    }
+                });
+            }
+        });
+
+        // Inisialisasi awal
+        renderAnggota();
+        renderJadwal();
+        renderGaleri();
+        muatTeksTersimpan();
+    </script>
+</body>
+</html>
